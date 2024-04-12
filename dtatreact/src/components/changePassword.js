@@ -1,29 +1,34 @@
+import { useState } from "react";
 import "./css/changePassword.css";
 import logo from "./css/images/logo_light.png";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../firebase/firebase";
 
 function ChangePassword() {
+  const [email, setEmail] = useState("");
+  const [captcha, setCaptcha] = useState("");
+  const [captchaGene, setCaptchaGene] = useState("");
+
   function generateCaptcha() {
-    var captcha = Math.random().toString(36).substring(7);
+    const captchaGene = Math.random().toString(36).substring(7);
+    setCaptchaGene(captchaGene);
     document.getElementById("captchaImage").src =
-      "https://via.placeholder.com/120x40?text=" + captcha;
+      "https://via.placeholder.com/120x40?text=" + captchaGene;
   }
-  function validateForm() {
-    var userEmail = document.getElementById("email").value;
-    var userCaptcha = document.getElementById("captcha").value;
-    var captchaImage = document
-      .getElementById("captchaImage")
-      .src.split("=")[1];
 
-    if (userEmail.trim() === "" || userCaptcha.trim() === "") {
-      alert("Please fill in all fields.");
-    } else if (userCaptcha !== captchaImage) {
-      alert("Captcha is incorrect. Please try again.");
-      generateCaptcha(); // Refresh captcha on incorrect input
+  function validateForm(e) {
+    e.preventDefault();
+    console.log(captcha, captchaGene);
+    if (captchaGene === captcha) {
+      sendPasswordResetEmail(auth, email)
+        .then((data) => {
+          alert("check your email");
+        })
+        .catch((err) => {
+          alert(err.code);
+        });
     } else {
-      // Redirect to welcome.html upon successful form submission
-
-      document.getElementById("resetPasswordForm").submit();
-      alert("password reset successfully");
+      alert("Invalid Captcha");
     }
   }
 
@@ -40,7 +45,9 @@ function ChangePassword() {
         </div>
         <form onSubmit={validateForm}>
           <dl>
-            <dt>Email</dt>
+            <dt>
+              <h3>Email</h3>
+            </dt>
             <dd>
               <input
                 className="changepass-input"
@@ -49,36 +56,45 @@ function ChangePassword() {
                 id="email"
                 placeholder="Enter your Email"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </dd>
-            <dd id="captchacontainer">
+            <dt className="changepass-dt">
+              <h3>Captcha</h3>
+            </dt>
+            <dd id="captchacontainer" className="changepass-captchacontainer">
               <img
                 id="captchaImage"
                 src="https://via.placeholder.com/120x40"
                 alt="Captcha"
               />
-              <button onClick={generateCaptcha} type="button">
-                Refresh
-              </button>
             </dd>
-            <dt>Captcha</dt>
-            <dd>
+            <dd className="changepass-Captcha">
               <input
                 type="text"
                 className="changepass-input"
                 id="captcha"
                 name="Captcha"
                 placeholder="Enter the Captcha"
-                required
+                value={captcha}
+                onChange={(e) => setCaptcha(e.target.value)}
               />
             </dd>
           </dl>
           <div className="buttonsdiv">
             <button className="changepass-btn" type="submit">
-              submit
+              Submit
             </button>
           </div>
         </form>
+        <button
+          className="changepass-refresh"
+          onClick={generateCaptcha}
+          type="button"
+        >
+          Refresh
+        </button>
       </div>
     </div>
   );
