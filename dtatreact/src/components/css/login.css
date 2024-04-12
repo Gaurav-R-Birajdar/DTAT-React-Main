@@ -58,11 +58,11 @@ img {
   margin-bottom: 3%;
 }
 
-.login-Dash .random {
+.login-panel {
   display: flex;
   line-height: 40px;
   flex-direction: column;
-  height: 80%;
+  height: 100%;
 }
 
 .login-input {
@@ -94,6 +94,14 @@ img {
 .login-link {
   text-align: center;
   color: rgb(90, 67, 180);
+}
+
+.login-forgot-password {
+  margin-top: 2%;
+}
+
+.login-new-user {
+  margin-top: 2%;
 }
 
 @media screen and (max-width: 768px) {
