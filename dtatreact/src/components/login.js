@@ -1,19 +1,23 @@
 import "./css/login.css";
 import logo from "./css/images/logo_light.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { auth } from "../firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 function Login() {
+  const navigate = useNavigate();
+  function HandleAdminWelcome() {
+    navigate("/AdminWelcome");
+  }
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const signIn = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
-      .then((useCredential) => {
-        console.log(useCredential);
+      .then(() => {
+        HandleAdminWelcome();
       })
       .catch((error) => {
         console.log(error);
