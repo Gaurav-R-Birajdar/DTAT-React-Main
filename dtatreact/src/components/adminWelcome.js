@@ -1,9 +1,17 @@
+import { Link, useNavigate } from "react-router-dom";
 import "./css/adminWelcome.css";
 import logo from "./css/images/logo_light.png";
 import { useState } from "react";
+import ChangePassword from "./changePassword";
+
 // import { Link } from "react-router-dom";
 
 function AdminWelcome() {
+  const navigate = useNavigate();
+  function handleProjectSelection() {
+    navigate("/ProjectSelection");
+  }
+
   const [displayactivity, setdisplayactivity] = useState(
     "display-activity-hide"
   );
@@ -47,8 +55,13 @@ function AdminWelcome() {
               Activity
             </button>
             <div className={displayactivity}>
-              <a>Task Allocation</a>
-              <a>Task Status</a>
+              <button
+                className="btn-task-allocation-admin"
+                onClick={handleProjectSelection}
+              >
+                Task Allocation
+              </button>
+              <button className="btn-task-status-admin">Task Status</button>
             </div>
           </div>
           <div className="adminwelcome-dropdown">
@@ -60,9 +73,9 @@ function AdminWelcome() {
               Profile
             </button>
             <div className={displayprofile}>
-              <a to="/">My details</a>
-              <a>Change Password</a>
-              <a>Logout</a>
+              <Link to="/">My details</Link>
+              <Link to={ChangePassword}>Change Password</Link>
+              <Link>Logout</Link>
             </div>
           </div>
         </div>
@@ -73,7 +86,9 @@ function AdminWelcome() {
             <h1>WELCOME TO INSTA-ICT</h1>
           </div>
           <div className="adminwelcome-section-buttonsdiv">
-            <button id="task-allocation-btn">Task Allocation</button>
+            <button id="task-allocation-btn" onClick={handleProjectSelection}>
+              Task Allocation
+            </button>
             <button id="dwnld-report-btn">Download Report</button>
           </div>
         </div>
