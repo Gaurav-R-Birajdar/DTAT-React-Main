@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./css/changePassword.css";
 import logo from "./css/images/logo_light.png";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../firebase/firebase";
+import { auth } from "./firebase/firebase";
 
 function ChangePassword() {
   const [email, setEmail] = useState("");

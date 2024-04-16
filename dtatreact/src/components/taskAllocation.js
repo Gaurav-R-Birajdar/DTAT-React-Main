@@ -1,0 +1,203 @@
+import "./css/taskAllocation.css";
+import logo from "./css/images/logo_light.png";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { fetchEmployees } from "./firebase/firebase"; // Import the fetchEmployees function
+
+function TaskAllocation() {
+  const [tablevisibility, settablevisibility] = useState("hidetable");
+  const [tablehead] = useState([
+    "Sr. No.",
+    "Project",
+    "Employee Name",
+    "Site Code",
+    "Latitude",
+    "Longitude",
+    "Allocated Date",
+    "Action",
+  ]);
+  const [projname, setProjname] = useState("");
+  const [empList, setEmpList] = useState([]);
+  const [selectedEmp, setSelectedEmp] = useState("");
+  const [employees, setEmployees] = useState([]); // State to store employee names
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    async function fetchData() {
+      if (location.state && location.state.projectName) {
+        setProjname(location.state.projectName);
+        const circle = location.state.circle; // Assuming circle is passed from ProjectSelection
+        const employeeNames = await fetchEmployees(circle);
+        setEmployees(employeeNames);
+      } else {
+        console.error("Project name or circle not found in location state.");
+      }
+    }
+    fetchData();
+  }, [location.state]);
+
+  function handletablesubmit() {
+    if (selectedEmp) {
+      setEmpList([...empList, selectedEmp]);
+      setSelectedEmp("");
+      settablevisibility("");
+    }
+  }
+
+  function handleAllocated() {
+    const siteCodeInput = document.getElementById("site-code");
+    const latitudeInput = document.getElementById("latitude");
+    const longitudeInput = document.getElementById("longitude");
+    const allocatedDateInput = document.getElementById("allocated-date");
+
+    const siteCode = siteCodeInput.value.trim();
+    const latitude = latitudeInput.value.trim();
+    const longitude = longitudeInput.value.trim();
+    const allocatedDate = allocatedDateInput.value.trim();
+
+    // Validation
+    const siteCodeRegex = /^[A-Z0-9]+$/; // Uppercase alphabets and numerical values only
+    const latitudeRegex = /^[0-9.A-Z]+$/; // Numerical values and dot only
+    const longitudeRegex = /^[0-9.A-Z]+$/; // Numerical values and dot only
+
+    if (!siteCode || !latitude || !longitude || !allocatedDate) {
+      alert("All fields are required.");
+      return;
+    }
+
+    if (!siteCodeRegex.test(siteCode)) {
+      alert(
+        "Site Code can only have uppercase alphabets and numerical values."
+      );
+      return;
+    }
+
+    if (!latitudeRegex.test(latitude)) {
+      alert("Latitude can only have numerical values.");
+      return;
+    }
+
+    if (!longitudeRegex.test(longitude)) {
+      alert("Longitude can only have numerical values.");
+      return;
+    }
+  }
+
+  function handlesubmitnavigate() {
+    navigate("/adminpredata");
+  }
+
+  function handleCancel(index) {
+    const updatedEmpList = [...empList];
+    updatedEmpList.splice(index, 1);
+    setEmpList(updatedEmpList);
+  }
+
+  return (
+    <div className="projectmanagement-main-div">
+      <header className="projectmanagement-header">
+        <img src={logo} alt="logo" id="logo2" />
+        <h1>Task Allocation</h1>
+      </header>
+      <div className="projectmanagement-box-div">
+        <dl>
+          <dt>
+            <h3 className="h3-taskAllocation">Project Name</h3>
+          </dt>
+          <dd>
+            <input
+              type="text"
+              id="project-name"
+              className="projectName-taskAllocation"
+              value={projname}
+              placeholder="project name"
+              disabled
+            />
+          </dd>
+          <dt>
+            <h3 className="h3-taskAllocation">Employee</h3>
+          </dt>
+          <dd>
+            <select
+              id="employee"
+              name="employee"
+              value={selectedEmp}
+              onChange={(e) => {
+                setSelectedEmp(e.target.value);
+              }}
+            >
+              <option className="employee-taskAllocation" value="">
+                --select employee--
+              </option>
+              {employees.map((employee, index) => (
+                <option key={index} value={employee}>
+                  {employee}
+                </option>
+              ))}
+            </select>
+          </dd>
+          <dd>
+            <button id="box-submit" onClick={handletablesubmit}>
+              Submit
+            </button>
+          </dd>
+        </dl>
+      </div>
+      <div className="projectmanagement-table-container" id={tablevisibility}>
+        <table id="allocation-table">
+          <thead>
+            <tr>
+              {tablehead.map((title, index) => {
+                return <th key={index}>{title}</th>;
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {empList.map((emp, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{projname}</td>
+                <td>{emp}</td>
+                <td>
+                  <input type="text" id="site-code" className="table-input" />
+                </td>
+                <td>
+                  <input type="number" id="latitude" className="table-input" />
+                </td>
+                <td>
+                  <input type="number" id="longitude" className="table-input" />
+                </td>
+                <td>
+                  <input
+                    type="date"
+                    id="allocated-date"
+                    className="table-input"
+                  />
+                </td>
+                <td>
+                  <button className="table-btn" onClick={handleAllocated}>
+                    Allocate
+                  </button>
+                  <button
+                    className="table-btn"
+                    onClick={() => handleCancel(index)}
+                  >
+                    Cancel
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="table-submit-button">
+          <button type="submit" id="submit1" onClick={handlesubmitnavigate}>
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default TaskAllocation;

@@ -1,60 +1,106 @@
 import "./css/projectSelection.css";
 import logo from "./css/images/logo_light.png";
-import { useState } from "react";
+import { createContext, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+
+export const ProjectnameContext = createContext();
 
 function ProjectSelection() {
+  const navigate = useNavigate();
   const [displayactivity, setdisplayactivity] = useState(
     "display-activity-hide"
   );
   const [displayprofile, setdisplayprofile] = useState("display-profile-hide");
   const [dropdownvalues, setdropdownvalues] = useState({
-    project: "",
-    operator: "",
-    activity: "",
+    project: "-1",
+    operator: "-1",
+    activity: "-1",
+    value: "-1",
+    circle: "-1", // Added circle state
   });
   const [displayvalue, setdisplayvalue] = useState("hidevalue");
+  const [error, setError] = useState(false);
+
   function handleprofiledropdown() {
-    if (displayprofile === "display-profile-show") {
-      setdisplayprofile("display-profile-hide");
-      setdisplayactivity("display-activity-hide");
-    } else {
-      setdisplayprofile("display-profile-show");
-      setdisplayactivity("display-activity-hide");
-    }
-  }
-  function handleallocationdropdown() {
-    if (displayactivity === "display-activity-show") {
-      setdisplayprofile("display-profile-hide");
-      setdisplayactivity("display-activity-hide");
-    } else {
-      setdisplayprofile("display-profile-hide");
-      setdisplayactivity("display-activity-show");
-    }
-  }
-  function handledropdown() {
-    setdisplayprofile("display-profile-hide");
+    setdisplayprofile((prevState) =>
+      prevState === "display-profile-show"
+        ? "display-profile-hide"
+        : "display-profile-show"
+    );
     setdisplayactivity("display-activity-hide");
   }
+
+  function handleallocationdropdown() {
+    setdisplayactivity((prevState) =>
+      prevState === "display-activity-show"
+        ? "display-activity-hide"
+        : "display-activity-show"
+    );
+    setdisplayprofile("display-profile-hide");
+  }
+
   function handleprojectchange(e) {
     setdropdownvalues({
+      ...dropdownvalues,
       project: e.target.value,
-      operator: dropdownvalues.operator,
-      activity: dropdownvalues.activity,
     });
   }
+
   function handleoperatorchange(e) {
     setdropdownvalues({
-      project: dropdownvalues.project,
+      ...dropdownvalues,
       operator: e.target.value,
-      activity: dropdownvalues.activity,
     });
   }
+
   function handleactivitychange(e) {
     setdropdownvalues({
-      project: dropdownvalues.project,
-      operator: dropdownvalues.operator,
+      ...dropdownvalues,
       activity: e.target.value,
     });
+    if (
+      e.target.value === "5G SCFT/SSV" &&
+      (dropdownvalues.project === "Ericssion" ||
+        dropdownvalues.project === "Nokia") &&
+      dropdownvalues.operator === "Jio"
+    ) {
+      setdisplayvalue("showvalue");
+    } else {
+      setdisplayvalue("hidevalue");
+    }
+  }
+
+  function handlevaluedropdownchange(e) {
+    setdropdownvalues({
+      ...dropdownvalues,
+      value: e.target.value,
+    });
+  }
+
+  function handleCircleChange(e) {
+    setdropdownvalues({
+      ...dropdownvalues,
+      circle: e.target.value,
+    });
+  }
+
+  function handleredirect() {
+    if (
+      dropdownvalues.project !== "-1" &&
+      dropdownvalues.operator !== "-1" &&
+      dropdownvalues.activity !== "-1" &&
+      dropdownvalues.circle !== "-1" // Check if circle is selected
+    ) {
+      setError(false);
+      navigate("/taskAllocation", {
+        state: {
+          projectName: dropdownvalues.project,
+          circle: dropdownvalues.circle, // Pass circle value as well
+        },
+      });
+    } else {
+      setError(true);
+    }
   }
 
   return (
@@ -64,34 +110,32 @@ function ProjectSelection() {
           <img src={logo} alt="logo" />
         </div>
         <div className="projectsel-header-title">
-          <h1 className="h1-projectSelection">Project Selection</h1>
+          <h1>Project Selection</h1>
         </div>
         <div className="projectsel-header-right-div">
           <div className="projectsel-dropdown">
             <button
               className="projectsel-header-btn"
               onClick={handleallocationdropdown}
-              onBlur={handledropdown}
             >
               Activity
             </button>
             <div className={displayactivity}>
-              <a>Task Allocation</a>
-              <a>Task Status</a>
+              <Link to="/taskallocation">Task Allocation</Link>
+              <Link to="/taskstatus">Task Status</Link>
             </div>
           </div>
           <div className="projectsel-dropdown">
             <button
               className="projectsel-header-btn"
               onClick={handleprofiledropdown}
-              onBlur={handledropdown}
             >
               Profile
             </button>
             <div className={displayprofile}>
-              <a>My details</a>
-              <a>Change Password</a>
-              <a>Logout</a>
+              <Link to="/">My details</Link>
+              <Link to="/changepassword">Change Password</Link>
+              <Link to="/mainwelcome">Logout</Link>
             </div>
           </div>
         </div>
@@ -99,35 +143,36 @@ function ProjectSelection() {
       <div className="projectsel-body-div">
         <div className="box">
           <dl>
-            <dt className="dt-projectSelection">
+            <dt>
               <h3>Select Project</h3>
             </dt>
             <dd>
               <select name="project" onChange={handleprojectchange}>
-                <option value="ericssion">Ericssion</option>
-                <option value="nokia">Nokia</option>
-                <option value="vil">VIL</option>
+                <option value="-1">--select project--</option>
+                <option value="Ericssion">Ericssion</option>
+                <option value="Nokia">Nokia</option>
+                <option value="VIL">VIL</option>
               </select>
             </dd>
-            <dt className="dt-projectSelection">
+            <dt>
               <h3>Select Operator</h3>
             </dt>
             <dd>
               <select name="operator" onChange={handleoperatorchange}>
-                <option value="bharti">Bharti</option>
-                <option value="airtel">Airtel</option>
-                <option value="jio">JIO</option>
-                <option value="vil">VIL</option>
+                <option value="-1">--select operator--</option>
+                <option value="Bharti">Bharti</option>
+                <option value="Airtel">Airtel</option>
+                <option value="Jio">JIO</option>
+                <option value="VIL">VIL</option>
               </select>
             </dd>
-            <dt className="dt-projectSelection">
+            <dt>
               <h3>Select Circle</h3>
             </dt>
             <dd>
-              <select id="project" name="circle">
-                <option value="MP" id="MP">
-                  MP (Madhya Pradesh)
-                </option>
+              <select id="project" name="circle" onChange={handleCircleChange}>
+                <option value="-1">--select circle--</option>
+                <option value="MP">MP (Madhya Pradesh)</option>
                 <option value="UPW">UPW (UP West)</option>
                 <option value="UPE">UPE (UP East)</option>
                 <option value="RJ">RJ (Rajasthan)</option>
@@ -148,35 +193,54 @@ function ProjectSelection() {
                 <option value="KE">KE (Kerala)</option>
               </select>
             </dd>
-            <dt className="dt-projectSelection">
+            <dt>
               <h3>Activity</h3>
             </dt>
             <dd>
               <select name="Activity" onChange={handleactivitychange}>
+                <option value="-1">--select activity--</option>
                 <option value="4G Cluster">4G Cluster</option>
                 <option value="4G SCFT">4G SCFT</option>
                 <option value="5G Cluster">5G Cluster</option>
                 <option value="5G SCFT/SSV">5G SCFT/SSV</option>
               </select>
             </dd>
+            {displayvalue === "showvalue" && (
+              <dd>
+                <select
+                  className="projectsel-number-option"
+                  name="valuedropdown"
+                  onChange={handlevaluedropdownchange}
+                >
+                  <select name="Select Value"></select>
+                  <option value="-1">--select value--</option>
+                  <option value="700">700</option>
+                  <option value="3500">3500</option>
+                </select>
+              </dd>
+            )}
             <dd>
-              <select
-                className="projectsel-number-option"
-                id={displayvalue}
-                name="valuedropdown"
+              <button
+                type="button"
+                className="projectsel-button"
+                onClick={handleredirect}
               >
-                <option value="700">700</option>
-                <option value="3500">3500</option>
-              </select>
-            </dd>
-            <dd>
-              <button type="button" className="projectsel-button">
                 Submit
               </button>
             </dd>
+            {error && (
+              <dd>
+                <p className="error-message">
+                  Please select all values before submitting.
+                </p>
+              </dd>
+            )}
           </dl>
         </div>
       </div>
+      <ProjectnameContext.Provider
+        value={dropdownvalues.project}
+      ></ProjectnameContext.Provider>
     </div>
   );
 }

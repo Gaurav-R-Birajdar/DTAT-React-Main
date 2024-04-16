@@ -6,6 +6,7 @@ import SignUp from "./components/signUp";
 import ChangePassword from "./components/changePassword";
 import AdminWelcome from "./components/adminWelcome";
 import ProjectSelection from "./components/projectSelection";
+import TaskAllocation from "./components/taskAllocation";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             path="/projectSelection"
             element={<ProjectSelection />}
           ></Route>
+          <Route path="/taskAllocation" element={<TaskAllocation />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

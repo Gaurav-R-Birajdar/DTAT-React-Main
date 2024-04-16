@@ -2,7 +2,7 @@ import "./css/signUp.css";
 import logo from "./css/images/logo_light.png";
 import avatar from "./css/images/avatar.svg";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase/firebase";
+import { auth } from "./firebase/firebase";
 import { useState } from "react";
 
 function SignUp() {

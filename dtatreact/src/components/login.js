@@ -2,7 +2,7 @@ import "./css/login.css";
 import logo from "./css/images/logo_light.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { auth } from "../firebase/firebase";
+import { auth } from "./firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 function Login() {

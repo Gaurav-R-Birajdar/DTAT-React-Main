@@ -6,15 +6,6 @@
   background-color: #f3e5f5;
   box-sizing: border-box;
 }
-
-.h1-projectSelection {
-  color: white;
-}
-
-.dt-projectSelection {
-  margin: 0.2%;
-}
-
 .projectsel-header {
   height: 14%;
   box-sizing: border-box;
@@ -37,7 +28,7 @@
 }
 .projectsel-header-title {
   width: 60%;
-
+  color: white;
   text-align: center;
   font-size: 0.8em;
 }
@@ -74,13 +65,13 @@ select {
 }
 .projectsel-button {
   background-color: #1976d2;
-  margin-top: 5%;
   color: white;
   cursor: pointer;
   border: none;
   height: 40px;
   width: 30%;
   border-radius: 25px;
+  margin-top: 5%;
 }
 .projectsel-button:hover {
   background-color: #1565c0;
@@ -145,4 +136,10 @@ select {
   .projectsel-header img {
     height: 38px;
   }
+}
+
+h3 {
+  text-align: left;
+  margin-left: 12.5%;
+  margin-bottom: 0.8%;
 }
