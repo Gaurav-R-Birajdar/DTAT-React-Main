@@ -2,7 +2,7 @@ import "./css/taskAllocation.css";
 import logo from "./css/images/logo_light.png";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { fetchEmployees } from "./firebase/firebase"; // Import the fetchEmployees function
+import { fetchEmployees, taskAllocate } from "./firebase/firebase"; // Import the fetchEmployees function
 
 function TaskAllocation() {
   const [tablevisibility, settablevisibility] = useState("hidetable");
@@ -40,8 +40,8 @@ function TaskAllocation() {
   function handletablesubmit() {
     if (selectedEmp) {
       setEmpList([...empList, selectedEmp]);
-      setSelectedEmp("");
       settablevisibility("");
+      console.log(selectedEmp);
     }
   }
 
@@ -58,8 +58,7 @@ function TaskAllocation() {
 
     // Validation
     const siteCodeRegex = /^[A-Z0-9]+$/; // Uppercase alphabets and numerical values only
-    const latitudeRegex = /^[A-Za-z0-9.]+$/; // Alphabets, numerical values, and dot
-    const longitudeRegex = /^[A-Za-z0-9.]+$/; // Alphabets, numerical values, and dot
+    const Regex = /^[0-9NWES]+$/; // Alphabets, numerical values
 
     if (!siteCode || !latitude || !longitude || !allocatedDate) {
       alert("All fields are required.");
@@ -73,22 +72,32 @@ function TaskAllocation() {
       return;
     }
 
-    if (!latitudeRegex.test(latitude)) {
+    if (!Regex.test(latitude)) {
       alert("Latitude can only have alphabets, numerical values, and dot.");
       return;
     }
 
-    if (!longitudeRegex.test(longitude)) {
+    if (!Regex.test(longitude)) {
       alert("Longitude can only have alphabets, numerical values, and dot.");
       return;
     }
 
     // Store values in variables or perform further actions
     // For example:
-    // const siteCodeValue = siteCode;
-    // const latitudeValue = latitude;
-    // const longitudeValue = longitude;
-    // const allocatedDateValue = allocatedDate;
+    const siteCodeValue = siteCode;
+    const latitudeValue = latitude;
+    const longitudeValue = longitude;
+    const allocatedDateValue = allocatedDate;
+
+    const taskStatus = taskAllocate(
+      siteCodeValue,
+      latitudeValue,
+      longitudeValue,
+      allocatedDateValue,
+      selectedEmp
+    );
+    if (taskStatus) alert(`Task Allocated to ${selectedEmp}`);
+    else alert("Failed to assign task");
 
     // Proceed with further actions if validations pass
   }

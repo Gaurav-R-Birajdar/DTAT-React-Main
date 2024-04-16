@@ -1,6 +1,12 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  setDoc,
+  doc,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBdFrEGQNlKAroj4TD7DdcAjW8LlfDStJU",
@@ -32,5 +38,22 @@ export async function fetchEmployees(circle) {
   } catch (error) {
     console.error("Error fetching employees:", error);
     return [];
+  }
+}
+
+export async function taskAllocate(site, lat, longi, date, emp) {
+  const docName = `${site}+${date}`;
+  const projectCollectionRef = collection(db, "Projects");
+  const projectdoc = doc(projectCollectionRef, docName);
+  try {
+    await setDoc(projectdoc, {
+      Longitude: longi,
+      Latitude: lat,
+      SiteCode: site,
+      Employee: emp,
+    });
+    return true;
+  } catch (error) {
+    return false;
   }
 }
