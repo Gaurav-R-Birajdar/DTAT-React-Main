@@ -58,8 +58,8 @@ function TaskAllocation() {
 
     // Validation
     const siteCodeRegex = /^[A-Z0-9]+$/; // Uppercase alphabets and numerical values only
-    const latitudeRegex = /^[0-9.A-Z]+$/; // Numerical values and dot only
-    const longitudeRegex = /^[0-9.A-Z]+$/; // Numerical values and dot only
+    const latitudeRegex = /^[A-Za-z0-9.]+$/; // Alphabets, numerical values, and dot
+    const longitudeRegex = /^[A-Za-z0-9.]+$/; // Alphabets, numerical values, and dot
 
     if (!siteCode || !latitude || !longitude || !allocatedDate) {
       alert("All fields are required.");
@@ -74,14 +74,23 @@ function TaskAllocation() {
     }
 
     if (!latitudeRegex.test(latitude)) {
-      alert("Latitude can only have numerical values.");
+      alert("Latitude can only have alphabets, numerical values, and dot.");
       return;
     }
 
     if (!longitudeRegex.test(longitude)) {
-      alert("Longitude can only have numerical values.");
+      alert("Longitude can only have alphabets, numerical values, and dot.");
       return;
     }
+
+    // Store values in variables or perform further actions
+    // For example:
+    // const siteCodeValue = siteCode;
+    // const latitudeValue = latitude;
+    // const longitudeValue = longitude;
+    // const allocatedDateValue = allocatedDate;
+
+    // Proceed with further actions if validations pass
   }
 
   function handlesubmitnavigate() {
@@ -163,10 +172,10 @@ function TaskAllocation() {
                   <input type="text" id="site-code" className="table-input" />
                 </td>
                 <td>
-                  <input type="number" id="latitude" className="table-input" />
+                  <input type="text" id="latitude" className="table-input" />
                 </td>
                 <td>
-                  <input type="number" id="longitude" className="table-input" />
+                  <input type="text" id="longitude" className="table-input" />
                 </td>
                 <td>
                   <input
