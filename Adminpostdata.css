@@ -1,0 +1,70 @@
+.adminpostdata-main-div {
+    height: 100vh;
+    box-sizing: border-box;
+    background: #f3e5f5;
+    overflow-y: auto;
+}
+
+.adminpostdata-section {
+    height: 84%;
+    width: 100%;
+    box-sizing: border-box;
+    margin:0 auto;
+    /* padding: 0.2%; */
+
+}
+
+.adminpostdata-subsection {
+    width: 70%;
+    height: 100%;
+    padding: 1%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin: 0 auto;
+
+}
+
+.adminpostdata-dl {
+    width: 40%;
+    margin:0.8% auto;
+    padding: 2%;
+    box-sizing: border-box;
+    background: #e0e0e0;
+    border-radius:8px;
+
+}
+
+.adminpostdata-dl dd {
+    margin-bottom: 3%;
+}
+
+.adminpostdata-dl input,
+select {
+    width: 90%;
+    height: 30px;
+}
+
+
+.adminpostdata-dl button {
+    background-color: #1976d2;
+    color: black;
+    border: none;
+    padding:2% 4%;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+@media screen and (max-width:835px) {
+    .adminpostdata-subsection{
+        width:100%;
+    }
+    .adminpostdata-section{
+        overflow-y: auto;
+    }
+    .adminpostdata-dl {
+        width:80%;
+    }
+}
