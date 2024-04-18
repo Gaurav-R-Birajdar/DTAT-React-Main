@@ -1,0 +1,80 @@
+.logdetails-main-div{
+    height:100vh;
+    width:100vw;
+    margin:0;
+    box-sizing: border-box;
+    padding:0;
+}
+.logdetails-header{
+    height:14%;
+    display:flex;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: space-evenly;
+    background-image: url("../../images/picture.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.logdetails-header-logo{
+    width:10%;
+    height:100%;
+    display:flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.logdetails-header-rightdiv{
+    width:10%;
+    height:100%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+#logdetails-logo{
+    width:80%;
+    height:80%;
+}
+.logdetails-header-heading{
+    color:white;
+    text-shadow: 0px 5px rgba(0,0,0,0.3);
+    width:80%;
+    height:100%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+#logdetails-header-button{
+    padding:3% 8%;
+    background: transparent;
+    color:red;
+    scale:1.4;
+    text-shadow: 0 5px rgba(0,0,0,0.3);
+    font-weight: 800;
+    cursor:pointer;
+    border:none;
+    transition:0.8s;
+}
+#logdetails-header-button:active{
+    scale:0.8;
+}
+
+@media screen and (max-width:429px) {
+    .logdetails-header-logo{
+        width:20%;
+        
+        justify-content:center;
+    } 
+    .logdetails-header-heading{
+        width:70%;
+    }
+    .logdetails-header-rightdiv{
+        width:10%;
+    }
+    #logdetails-logo{
+        width:70%;
+        height:70%;
+    }
+    .logdetails-subsection{
+        width:100%;
+        overflow-x: scroll;
+    }
+}
